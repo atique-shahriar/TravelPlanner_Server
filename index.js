@@ -52,6 +52,24 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    app.get("/touristSpots/ascSort", async (req, res) => {
+      const cursor = spotCollection.find().sort({averageCost: 1});
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/touristSpots/desSort", async (req, res) => {
+      const cursor = spotCollection.find().sort({averageCost: -1});
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/touristSpot/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await spotCollection.findOne(query);
+      res.send(result);
+    });
 
     app.post("/touristSpots", async (req, res) => {
       const spot = req.body;

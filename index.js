@@ -1,15 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const {MongoClient, ServerApiVersion} = require("mongodb");
+const {MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
 
-const uri =
-  "mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.vbl1j76.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.vbl1j76.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -21,11 +20,45 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    //await client.connect();
+    await client.connect();
     // Send a ping to confirm a successful connection
     //await client.db("admin").command({ping: 1});
     const database = client.db("travelPlanner");
     const userCollection = database.collection("users");
+    const spotCollection = database.collection("touristSpot");
+
+    app.get("/users", async (req, res) => {
+      const cursor = userCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await userCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      console.log("New User", user);
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/touristSpots", async (req, res) => {
+      const cursor = spotCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/touristSpots", async (req, res) => {
+      const spot = req.body;
+      console.log("New Spot", spot);
+      const result = await spotCollection.insertOne(spot);
+      res.send(result);
+    });
 
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"

@@ -28,12 +28,6 @@ async function run() {
     const spotCollection = database.collection("touristSpot");
     const countryCollection = database.collection("countryInfo");
 
-    app.get("/countries", async (req, res) => {
-      const cursor = countryCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    });
-
     app.get("/users", async (req, res) => {
       const cursor = userCollection.find();
       const result = await cursor.toArray();
@@ -71,6 +65,14 @@ async function run() {
     app.get("/touristSpots/desSort", async (req, res) => {
       const cursor = spotCollection.find().sort({averageCost: -1});
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/touristSpot/:countryName", async (req, res) => {
+      const countryName = req.params.countryName;
+      const query = {countryName: countryName};
+      const options = {projection: {_id: 0}};
+      const result = await spotCollection.find(query, options).toArray();
       res.send(result);
     });
 
@@ -117,6 +119,12 @@ async function run() {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)};
       const result = await spotCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.get("/countries", async (req, res) => {
+      const cursor = countryCollection.find();
+      const result = await cursor.toArray();
       res.send(result);
     });
 

@@ -26,6 +26,13 @@ async function run() {
     const database = client.db("travelPlanner");
     const userCollection = database.collection("users");
     const spotCollection = database.collection("touristSpot");
+    const countryCollection = database.collection("countryInfo");
+
+    app.get("/countries", async (req, res) => {
+      const cursor = countryCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
     app.get("/users", async (req, res) => {
       const cursor = userCollection.find();

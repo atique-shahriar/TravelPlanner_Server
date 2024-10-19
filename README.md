@@ -7,7 +7,7 @@
         Travel Planner
     </a>
 </h3>
-<h4>Tools & Technologies: React, Node, MongoDB, Firebase, Animate.css, Swiper Slider, React-simple-typewriter, React Awesome reveal </h4>
+<h4>Tools & Technologies: React, Node, MongoDB, Firebase, Animate.css, Swiper Slider, React Simple Typewriter, React Awesome Reveal </h4>
 
 <h2>Website Features:</h2>
 
